@@ -125,26 +125,26 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 					}
 					addresses = newAddresses
 					logrus.Infof("Tunnel endpoint watch event: %v", addresses)
-					if onChange != nil {
-						onChange(addresses)
-					}
+					// if onChange != nil {
+					// 	onChange(addresses)
+					// }
 
-					validEndpoint := map[string]bool{}
+					// validEndpoint := map[string]bool{}
 
-					for _, address := range addresses {
-						validEndpoint[address] = true
-						if _, ok := disconnect[address]; !ok {
-							disconnect[address] = connect(ctx, nil, address, config, transportConfig)
-						}
-					}
+					// for _, address := range addresses {
+					// 	validEndpoint[address] = true
+					// 	if _, ok := disconnect[address]; !ok {
+					// 		disconnect[address] = connect(ctx, nil, address, config, transportConfig)
+					// 	}
+					// }
 
-					for address, cancel := range disconnect {
-						if !validEndpoint[address] {
-							cancel()
-							delete(disconnect, address)
-							logrus.Infof("Stopped tunnel to %s", address)
-						}
-					}
+					// for address, cancel := range disconnect {
+					// 	if !validEndpoint[address] {
+					// 		cancel()
+					// 		delete(disconnect, address)
+					// 		logrus.Infof("Stopped tunnel to %s", address)
+					// 	}
+					// }
 				}
 			}
 		}
