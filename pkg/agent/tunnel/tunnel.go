@@ -71,13 +71,15 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 
 	addresses := []string{config.ServerAddress}
 
-	endpoint, _ := client.CoreV1().Endpoints("default").Get("kubernetes", metav1.GetOptions{})
-	if endpoint != nil {
-		addresses = getAddresses(endpoint)
-		if onChange != nil {
-			onChange(addresses)
+	/*
+		endpoint, _ := client.CoreV1().Endpoints("default").Get("kubernetes", metav1.GetOptions{})
+		if endpoint != nil {
+			addresses = getAddresses(endpoint)
+			if onChange != nil {
+				onChange(addresses)
+			}
 		}
-	}
+	*/
 
 	disconnect := map[string]context.CancelFunc{}
 
