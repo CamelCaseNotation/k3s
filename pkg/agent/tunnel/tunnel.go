@@ -71,21 +71,20 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 
 	addresses := []string{config.ServerAddress}
 
-	/*
-		endpoint, _ := client.CoreV1().Endpoints("default").Get("kubernetes", metav1.GetOptions{})
-		if endpoint != nil {
-			addresses = getAddresses(endpoint)
-			if onChange != nil {
-				onChange(addresses)
-			}
+	endpoint, _ := client.CoreV1().Endpoints("default").Get("kubernetes", metav1.GetOptions{})
+	if endpoint != nil {
+		addresses = getAddresses(endpoint)
+		if onChange != nil {
+			onChange(addresses)
 		}
-	*/
+	}
 
 	disconnect := map[string]context.CancelFunc{}
 
 	wg := &sync.WaitGroup{}
 	for _, address := range addresses {
 		if _, ok := disconnect[address]; !ok {
+			logrus.Infof("[setup] Attempting to connect to address: %v\n", address)
 			disconnect[address] = connect(ctx, wg, address, config, transportConfig)
 		}
 	}
@@ -125,26 +124,28 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 					}
 					addresses = newAddresses
 					logrus.Infof("Tunnel endpoint watch event: %v", addresses)
-					// if onChange != nil {
-					// 	onChange(addresses)
-					// }
+					if onChange != nil {
+						onChange(addresses)
+					}
 
-					// validEndpoint := map[string]bool{}
+					validEndpoint := map[string]bool{}
 
-					// for _, address := range addresses {
-					// 	validEndpoint[address] = true
-					// 	if _, ok := disconnect[address]; !ok {
-					// 		disconnect[address] = connect(ctx, nil, address, config, transportConfig)
-					// 	}
-					// }
+					for _, address := range addresses {
+						validEndpoint[address] = true
+						if _, ok := disconnect[address]; !ok {
+							logrus.Infof("[watch goroutine] Attempting to connect to address: %v\n", address)
+							disconnect[address] = connect(ctx, nil, address, config, transportConfig)
+							logrus.Infof("[watch goroutine] Made it past connecting to address: %v\n", address)
+						}
+					}
 
-					// for address, cancel := range disconnect {
-					// 	if !validEndpoint[address] {
-					// 		cancel()
-					// 		delete(disconnect, address)
-					// 		logrus.Infof("Stopped tunnel to %s", address)
-					// 	}
-					// }
+					for address, cancel := range disconnect {
+						if !validEndpoint[address] {
+							cancel()
+							delete(disconnect, address)
+							logrus.Infof("Stopped tunnel to %s", address)
+						}
+					}
 				}
 			}
 		}
