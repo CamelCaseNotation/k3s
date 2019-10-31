@@ -125,10 +125,10 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 					newAddresses := getAddresses(endpoint)
 					if config.AgentConfig.ServerURLPublic != nil && len(config.AgentConfig.ServerURLPublic) > 0 {
 						// copy(newAddresses, addresses)
-						newAddresses = append(newAddresses, config.AgentConfig.ServerURLPublic...)
 						logrus.Infof("Agent configured to try creating tunnels to public URLs, appending public addresses (%v) to found ones (%v)",
 							config.AgentConfig.ServerURLPublic,
 							newAddresses)
+						newAddresses = append(newAddresses, config.AgentConfig.ServerURLPublic...)
 					}
 					if reflect.DeepEqual(newAddresses, addresses) {
 						continue watching
@@ -164,7 +164,9 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 
 	wait := make(chan int, 1)
 	go func() {
-		wg.Wait()
+		// We don't want to wait to connect to _every_ address
+		// wg.Wait()
+		time.Sleep(10 * time.Second)
 		wait <- 0
 	}()
 
