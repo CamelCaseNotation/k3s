@@ -81,6 +81,7 @@ type Agent struct {
 	DisableCCM          bool
 	DisableNPC          bool
 	Rootless            bool
+	ServerURLPublic     []string
 }
 
 type Control struct {

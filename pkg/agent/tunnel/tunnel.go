@@ -70,10 +70,13 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 	}
 
 	addresses := []string{config.ServerAddress}
+	if config.AgentConfig.ServerURLPublic != nil && len(config.AgentConfig.ServerURLPublic) > 0 {
+		addresses = append(addresses, config.AgentConfig.ServerURLPublic...)
+	}
 
 	endpoint, _ := client.CoreV1().Endpoints("default").Get("kubernetes", metav1.GetOptions{})
 	if endpoint != nil {
-		addresses = getAddresses(endpoint)
+		addresses = append(addresses, getAddresses(endpoint)...)
 		if onChange != nil {
 			onChange(addresses)
 		}
@@ -81,6 +84,7 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 
 	disconnect := map[string]context.CancelFunc{}
 
+	logrus.Infof("[setup] addresses before connect is: %v\n", addresses)
 	wg := &sync.WaitGroup{}
 	for _, address := range addresses {
 		if _, ok := disconnect[address]; !ok {
@@ -119,6 +123,13 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 					}
 
 					newAddresses := getAddresses(endpoint)
+					if config.AgentConfig.ServerURLPublic != nil && len(config.AgentConfig.ServerURLPublic) > 0 {
+						// copy(newAddresses, addresses)
+						newAddresses = append(newAddresses, config.AgentConfig.ServerURLPublic...)
+						logrus.Infof("Agent configured to try creating tunnels to public URLs, appending public addresses (%v) to found ones (%v)",
+							config.AgentConfig.ServerURLPublic,
+							newAddresses)
+					}
 					if reflect.DeepEqual(newAddresses, addresses) {
 						continue watching
 					}

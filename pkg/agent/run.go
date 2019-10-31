@@ -109,7 +109,10 @@ func Run(ctx context.Context, cfg cmds.Agent) error {
 		return err
 	}
 	if lb != nil {
-		cfg.ServerURL = lb.LoadBalancerServerURL()
+		// cfg.ServerURL = lb.LoadBalancerServerURL()
+		if cfg.ServerURLPublic == nil {
+			cfg.ServerURL = lb.LoadBalancerServerURL()
+		}
 	}
 
 	for {

@@ -33,6 +33,7 @@ type Agent struct {
 	Labels             cli.StringSlice
 	Taints             cli.StringSlice
 	PrivateRegistry    string
+	ServerURLPublic    cli.StringSlice
 }
 
 type AgentShared struct {
@@ -120,6 +121,11 @@ var (
 		Destination: &AgentConfig.PrivateRegistry,
 		Value:       "/etc/rancher/k3s/registries.yaml",
 	}
+	ServerURLPublicFlag = cli.StringSliceFlag{
+		Name:  "server-url-public",
+		Usage: "(agent) A string slice of publicly routable URLs to the apiserver(s)",
+		Value: &AgentConfig.ServerURLPublic,
+	}
 )
 
 func NewAgentCommand(action func(ctx *cli.Context) error) cli.Command {
@@ -183,6 +189,7 @@ func NewAgentCommand(action func(ctx *cli.Context) error) cli.Command {
 			NodeTaints,
 			PrivateRegistryFlag,
 			NodeExternalIPFlag,
+			ServerURLPublicFlag,
 		},
 	}
 }
