@@ -147,10 +147,6 @@ func RunTunnelOnly(ctx context.Context, cfg cmds.Agent) error {
 	cfg.DataDir = filepath.Join(cfg.DataDir, "agent")
 	os.MkdirAll(cfg.DataDir, 0700)
 
-	if cfg.ClusterSecret != "" {
-		cfg.Token = "K10node:" + cfg.ClusterSecret
-	}
-
 	cfg.DisableLoadBalancer = true
 	lb, err := loadbalancer.Setup(ctx, cfg)
 	if err != nil {
