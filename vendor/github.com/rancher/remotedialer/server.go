@@ -74,6 +74,7 @@ func (s *Server) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	// Don't need to associate req.Context() to the Session, it will cancel otherwise
 	code, err := session.Serve(context.Background())
 	if err != nil {
+		// TODO: JOSH, figure out what this is! This is preventing logs/exec from apiserver to aws/azure nodes
 		// Hijacked so we can't write to the client
 		logrus.Infof("error in remotedialer server [%d]: %v", code, err)
 	}

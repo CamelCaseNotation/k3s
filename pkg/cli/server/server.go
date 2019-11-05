@@ -183,7 +183,8 @@ func run(app *cli.Context, cfg *cmds.Server) error {
 	token := server.FormatToken(serverConfig.ControlConfig.Runtime.NodeToken, certs)
 
 	agentConfig := cmds.AgentConfig
-	agentConfig.Debug = app.GlobalBool("bool")
+	// agentConfig.Debug = app.GlobalBool("bool") // I feel like this should be "debug"
+	agentConfig.Debug = true
 	agentConfig.DataDir = filepath.Dir(serverConfig.ControlConfig.DataDir)
 	agentConfig.ServerURL = url
 	agentConfig.Token = token
@@ -194,7 +195,7 @@ func run(app *cli.Context, cfg *cmds.Server) error {
 		agentConfig.RootlessAlreadyUnshared = true
 	}
 
-	return agent.Run(ctx, agentConfig)
+	return agent.RunTunnelOnly(ctx, agentConfig)
 }
 
 func knownIPs(ips []string) []string {

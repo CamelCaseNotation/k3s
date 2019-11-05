@@ -133,6 +133,32 @@ func Run(ctx context.Context, cfg cmds.Agent) error {
 	return run(ctx, cfg, lb)
 }
 
+// RunTunnelOnly is called by the server when --disable-agent=true
+func RunTunnelOnly(ctx context.Context, cfg cmds.Agent) error {
+	cfg.DataDir = filepath.Join(cfg.DataDir, "agent")
+	os.MkdirAll(cfg.DataDir, 0700)
+
+	if cfg.ClusterSecret != "" {
+		cfg.Token = "K10node:" + cfg.ClusterSecret
+	}
+
+	cfg.DisableLoadBalancer = true
+	lb, err := loadbalancer.Setup(ctx, cfg)
+	if err != nil {
+		return err
+	}
+	if lb != nil {
+		// cfg.ServerURL = lb.LoadBalancerServerURL()
+		if cfg.ServerURLPublic == nil {
+			cfg.ServerURL = lb.LoadBalancerServerURL()
+		}
+	}
+
+	nodeConfig := config.Get(ctx, cfg)
+	err = tunnel.Setup(ctx, nodeConfig, lb.Update)
+	return err
+}
+
 func validate() error {
 	cgroups, err := ioutil.ReadFile("/proc/self/cgroup")
 	if err != nil {
