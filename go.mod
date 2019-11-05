@@ -9,6 +9,7 @@ replace (
 	github.com/containerd/console => github.com/containerd/console v0.0.0-20181022165439-0650fd9eeb50
 	github.com/containerd/containerd => github.com/rancher/containerd v1.3.0-k3s.4
 	github.com/containerd/continuity => github.com/containerd/continuity v0.0.0-20190815185530-f2a389ac0a02
+	github.com/containerd/cri => github.com/rancher/cri v1.3.0-k3s.2
 	github.com/containerd/fifo => github.com/containerd/fifo v0.0.0-20190816180239-bda0ff6ed73c
 	github.com/containerd/go-runc => github.com/containerd/go-runc v0.0.0-20190911050354-e029b79d8cda
 	github.com/containerd/typeurl => github.com/containerd/typeurl v0.0.0-20180627222232-a93fcdb778cd
@@ -30,7 +31,7 @@ replace (
 	github.com/prometheus/client_model => github.com/prometheus/client_model v0.0.0-20180712105110-5c3871d89910
 	github.com/prometheus/common => github.com/prometheus/common v0.0.0-20181126121408-4724e9255275
 	github.com/prometheus/procfs => github.com/prometheus/procfs v0.0.0-20181204211112-1dc9a6cbc91a
-	github.com/rancher/kine => github.com/ibuildthecloud/kine v0.1.0
+	github.com/rancher/kine => github.com/ibuildthecloud/kine v0.1.1
 	k8s.io/api => github.com/rancher/kubernetes/staging/src/k8s.io/api v1.16.2-k3s.1
 	k8s.io/apiextensions-apiserver => github.com/rancher/kubernetes/staging/src/k8s.io/apiextensions-apiserver v1.16.2-k3s.1
 	k8s.io/apimachinery => github.com/rancher/kubernetes/staging/src/k8s.io/apimachinery v1.16.2-k3s.1
@@ -67,7 +68,7 @@ require (
 	github.com/containerd/cgroups v0.0.0-20190923161937-abd0b19954a6 // indirect
 	github.com/containerd/containerd v1.3.0-beta.2.0.20190828155532-0293cbd26c69
 	github.com/containerd/continuity v0.0.0-20190827140505-75bee3e2ccb6 // indirect
-	github.com/containerd/cri v1.11.1-0.20191009213552-1fb415d208be
+	github.com/containerd/cri v0.0.0-00010101000000-000000000000
 	github.com/containerd/fifo v0.0.0-20190816180239-bda0ff6ed73c // indirect
 	github.com/containerd/go-cni v0.0.0-20190904155053-d20b7eebc7ee // indirect
 	github.com/containerd/go-runc v0.0.0-20190923131748-a2952bc25f51 // indirect
@@ -96,7 +97,7 @@ require (
 	github.com/opencontainers/runc v1.0.0-rc2.0.20190611121236-6cc515888830
 	github.com/pkg/errors v0.8.1
 	github.com/rakelkar/gonetsh v0.0.0-20190719023240-501daadcadf8 // indirect
-	github.com/rancher/dynamiclistener v0.1.1-0.20191010011134-8a2488bc860a
+	github.com/rancher/dynamiclistener v0.1.1-0.20191031022009-6224794ef3cb
 	github.com/rancher/helm-controller v0.2.2
 	github.com/rancher/kine v0.0.0-00010101000000-000000000000
 	github.com/rancher/remotedialer v0.2.0

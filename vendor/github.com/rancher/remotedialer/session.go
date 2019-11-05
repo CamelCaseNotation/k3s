@@ -34,11 +34,11 @@ type Session struct {
 }
 
 // PrintTunnelData No tunnel logging by default
-var PrintTunnelData bool
+var PrintTunnelData bool = true
 
 func init() {
-	if os.Getenv("CATTLE_TUNNEL_DATA_DEBUG") == "true" {
-		PrintTunnelData = true
+	if os.Getenv("CATTLE_TUNNEL_DATA_DEBUG") == "false" {
+		PrintTunnelData = false
 	}
 }
 
