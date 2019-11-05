@@ -120,12 +120,6 @@ var (
 		Usage: "(agent/node) Registering kubelet with set of labels",
 		Value: &AgentConfig.Labels,
 	}
-	PrivateRegistryFlag = cli.StringFlag{
-		Name:        "private-registry",
-		Usage:       "(agent) Private registry configuration file",
-		Destination: &AgentConfig.PrivateRegistry,
-		Value:       "/etc/rancher/k3s/registries.yaml",
-	}
 	ServerURLPublicFlag = cli.StringSliceFlag{
 		Name:  "server-url-public",
 		Usage: "(agent) A string slice of publicly routable URLs to the apiserver(s)",

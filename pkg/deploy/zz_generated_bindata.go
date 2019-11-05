@@ -303,12 +303,12 @@ type bintree struct {
 }
 
 var _bintree = &bintree{nil, map[string]*bintree{
-	"ccm.yaml":            {ccmYaml, map[string]*bintree{}},
-	"coredns.yaml":        {corednsYaml, map[string]*bintree{}},
-	"local-storage.yaml":  {localStorageYaml, map[string]*bintree{}},
-	"metrics-server.yaml": {metricsServerYaml, map[string]*bintree{}},
-	"rolebindings.yaml":   {rolebindingsYaml, map[string]*bintree{}},
-	"traefik.yaml":        {traefikYaml, map[string]*bintree{}},
+	"ccm.yaml":            &bintree{ccmYaml, map[string]*bintree{}},
+	"coredns.yaml":        &bintree{corednsYaml, map[string]*bintree{}},
+	"local-storage.yaml":  &bintree{localStorageYaml, map[string]*bintree{}},
+	"metrics-server.yaml": &bintree{metricsServerYaml, map[string]*bintree{}},
+	"rolebindings.yaml":   &bintree{rolebindingsYaml, map[string]*bintree{}},
+	"traefik.yaml":        &bintree{traefikYaml, map[string]*bintree{}},
 }}
 
 // RestoreAsset restores an asset under the given directory
