@@ -144,23 +144,39 @@ func Run(ctx context.Context, cfg cmds.Agent) error {
 
 // RunTunnelOnly is called by the server when --disable-agent=true
 func RunTunnelOnly(ctx context.Context, cfg cmds.Agent) error {
+	logrus.Infof("[RunTunnelOnly] made it to beginning")
 	cfg.DataDir = filepath.Join(cfg.DataDir, "agent")
 	os.MkdirAll(cfg.DataDir, 0700)
 
 	cfg.DisableLoadBalancer = true
-	lb, err := loadbalancer.Setup(ctx, cfg)
-	if err != nil {
-		return err
-	}
-	if lb != nil {
-		// cfg.ServerURL = lb.LoadBalancerServerURL()
-		if cfg.ServerURLPublic == nil {
-			cfg.ServerURL = lb.LoadBalancerServerURL()
+	// lb, err := loadbalancer.Setup(ctx, cfg)
+	// if err != nil {
+	// 	return err
+	// }
+	// if lb != nil {
+	// 	// cfg.ServerURL = lb.LoadBalancerServerURL()
+	// 	if cfg.ServerURLPublic == nil {
+	// 		cfg.ServerURL = lb.LoadBalancerServerURL()
+	// 	}
+	// }
+
+	for {
+		newToken, err := clientaccess.NormalizeAndValidateTokenForUser(cfg.ServerURL, cfg.Token, "node")
+		if err != nil {
+			logrus.Error(err)
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case <-time.After(2 * time.Second):
+			}
+			continue
 		}
+		cfg.Token = newToken
+		break
 	}
 
 	nodeConfig := config.Get(ctx, cfg)
-	err = tunnel.Setup(ctx, nodeConfig, lb.Update)
+	err := tunnel.Setup(ctx, nodeConfig, nil)
 	return err
 }
 

@@ -51,21 +51,25 @@ func getAddresses(endpoint *v1.Endpoints) []string {
 }
 
 func Setup(ctx context.Context, config *config.Node, onChange func([]string)) error {
+	logrus.Infof("[setup] beginning of tunnel Setup")
 	restConfig, err := clientcmd.BuildConfigFromFlags("", config.AgentConfig.KubeConfigK3sController)
 	if err != nil {
 		return err
 	}
 
+	logrus.Infof("[setup] before NewForConfig")
 	client, err := kubernetes.NewForConfig(restConfig)
 	if err != nil {
 		return err
 	}
 
+	logrus.Infof("[setup] before BuildConfigFromFlags")
 	nodeRestConfig, err := clientcmd.BuildConfigFromFlags("", config.AgentConfig.KubeConfigKubelet)
 	if err != nil {
 		return err
 	}
 
+	logrus.Infof("[setup] before TLSConfigFor")
 	tlsConfig, err := rest.TLSConfigFor(nodeRestConfig)
 	if err != nil {
 		return err
@@ -86,11 +90,11 @@ func Setup(ctx context.Context, config *config.Node, onChange func([]string)) er
 
 	disconnect := map[string]context.CancelFunc{}
 
-	logrus.Infof("[setup] addresses before connect is: %v\n", addresses)
+	logrus.Infof("[setup] addresses before connect is: %v", addresses)
 	wg := &sync.WaitGroup{}
 	for _, address := range addresses {
 		if _, ok := disconnect[address]; !ok {
-			logrus.Infof("[setup] Attempting to connect to address: %v\n", address)
+			logrus.Infof("[setup] Attempting to connect to address: %v", address)
 			disconnect[address] = connect(ctx, wg, address, tlsConfig)
 		}
 	}

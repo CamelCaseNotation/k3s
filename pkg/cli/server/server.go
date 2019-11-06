@@ -180,10 +180,10 @@ func run(app *cli.Context, cfg *cmds.Server) error {
 		systemd.SdNotify(true, "READY=1\n")
 	}
 
-	// if cfg.DisableAgent {
-	// 	<-ctx.Done()
-	// 	return nil
-	// }
+	if cfg.DisableAgent && os.Getenv("OLD_BEHAVIOR") == "true" {
+		<-ctx.Done()
+		return nil
+	}
 
 	ip := serverConfig.ControlConfig.BindAddress
 	if ip == "" {
