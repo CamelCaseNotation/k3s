@@ -205,6 +205,10 @@ func run(app *cli.Context, cfg *cmds.Server) error {
 		agentConfig.RootlessAlreadyUnshared = true
 	}
 
+	if os.Getenv("OLD_BEHAVIOR") == "true" {
+		return agent.Run(ctx, agentConfig)
+	}
+
 	return agent.RunTunnelOnly(ctx, agentConfig)
 }
 
