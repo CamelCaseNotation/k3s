@@ -109,10 +109,8 @@ func Run(ctx context.Context, cfg cmds.Agent) error {
 	cfg.DataDir = filepath.Join(cfg.DataDir, "agent")
 	os.MkdirAll(cfg.DataDir, 0700)
 
-	lb, err := loadbalancer.Setup(ctx, cfg)
-	if err != nil {
-		return err
-	}
+	// lb, err := loadbalancer.Setup(ctx, cfg)
+	lb := nil
 	if lb != nil {
 		cfg.ServerURL = lb.LoadBalancerServerURL()
 	}
